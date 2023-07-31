@@ -5,7 +5,6 @@ class ConsultaError(Exception):
     pass
 
 
-
 def consultar_inmuebles(year=None, city=None, label=None):
     try:
         # Construir la consulta SQL según los filtros proporcionados

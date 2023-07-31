@@ -12,10 +12,13 @@ db_config = {
     'user': os.getenv('DB_USER'),
     'password': os.getenv('DB_PASSWORD'),
     'database': os.getenv('DB_NAME'),
-    'port': os.getenv('PORT', 3306)  # Si PORT no está definido en el archivo .env, se usa el valor por defecto 3306
+    # Si PORT no está definido en el archivo .env, se usa el valor por defecto 3306
+    'port': os.getenv('PORT', 3306)
 }
 
 # Función para realizar consultas a la base de datos y obtener claves y valores
+
+
 def execute_query(query, args=None):
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()

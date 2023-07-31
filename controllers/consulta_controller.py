@@ -3,6 +3,7 @@ from models.inmueble import consultar_inmuebles, ConsultaError
 
 bp = Blueprint('consulta', __name__)
 
+
 @bp.route('/inmuebles', methods=['GET'])
 def consultar_inmuebles_controller():
     try:
@@ -14,7 +15,7 @@ def consultar_inmuebles_controller():
         # Validar los filtros
         if year is None and city is None and label is None:
             raise ConsultaError('Se requiere al menos un filtro')
-    
+
         # Consultar los inmuebles utilizando el modelo
         results = consultar_inmuebles(year, city, label)
 
