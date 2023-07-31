@@ -1,0 +1,10 @@
+# Ignorar el caché de Python
+__pycache__/
+*.pyc
+
+# Ignorar archivos generados por el IDE de Python (por ejemplo, PyCharm)
+*.pyo
+*.pyd
+
+# Ignorar la carpeta del entorno virtual (por ejemplo, virtualenv o venv)
+venv/

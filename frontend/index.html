@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consulta de Inmuebles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Consulta de Inmuebles</h1>
+        <div class="filters">
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" placeholder="Ej. Bogota">
+
+            <label for="ano_construccion">Año de Construcción:</label>
+            <input type="text" id="ano_construccion" placeholder="Ej. 2022">
+
+            <button onclick="consultarInmuebles()">Buscar</button>
+        </div>
+        <div id="resultado" class="inmuebles-list">
+            <!-- Aquí se mostrarán los resultados de la consulta -->
+        </div>
+    </div>
+    <script>
+        
+        function consultarInmuebles() {
+            // Obtenemos los valores de los filtros
+            const ciudad = document.getElementById("ciudad").value;
+            const anoConstruccion = document.getElementById("ano_construccion").value;
+            const year= parseInt(anoConstruccion)
+            var  datosEjemplo = {}
+            // Aquí realizarías la petición al servidor para obtener los resultados
+            // y luego mostrarlos en el front-end
+            // Por ahora, solo agregaremos datos de ejemplo
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+            
+
+            fetch(`http://127.0.0.1:5000/inmuebles?year=${year}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Aquí puedes trabajar con los datos obtenidos desde el servidor
+                    console.log(data);
+                    const datosEjemplo = data
+                    // Limpiamos el contenido actual del elemento resultado
+            const resultadoElement = document.getElementById("resultado");
+            resultadoElement.innerHTML = "";
+
+            // Generamos el contenido dinámico para cada inmueble
+            datosEjemplo.forEach((inmueble) => {
+                console.log(inmueble.city);
+                const inmuebleCard = document.createElement("div");
+                inmuebleCard.classList.add("inmueble-card");
+
+                const titulo = document.createElement("h3");
+                titulo.textContent = inmueble.address;
+
+                const ciudadEstado = document.createElement("p");
+                ciudadEstado.textContent = `${inmueble.city} - ${inmueble.label}`;
+
+                const precio = document.createElement("p");
+                precio.textContent = `Precio: $${inmueble.price}`;
+
+                const descripcion = document.createElement("p");
+                descripcion.textContent = `Descripciòn: ${inmueble.description}`;
+
+                const likes = document.createElement("p");
+                
+
+                const likeBtn = document.createElement("button");
+                likeBtn.textContent = "Me gusta";
+                likeBtn.classList.add("like-btn");
+
+                // Agregamos un evento al botón de "Me gusta" para registrar el like
+                likeBtn.addEventListener("click", () => darMeGusta(inmueble.id));
+
+                inmuebleCard.appendChild(titulo);
+                inmuebleCard.appendChild(ciudadEstado);
+                inmuebleCard.appendChild(precio);
+                inmuebleCard.appendChild(descripcion);
+                inmuebleCard.appendChild(likeBtn);
+
+                resultadoElement.appendChild(inmuebleCard);
+            });
+                })
+                .catch(error => {
+                    // Manejo de errores en caso de que la solicitud falle
+                    console.error('Error:', error);
+                });
+            
+
+            
+        }
+
+        function darMeGusta(idInmueble) {
+            // Aquí implementarías la lógica para registrar el "me gusta" en el servidor
+            // Puedes enviar una petición al backend para actualizar la cantidad de likes
+            // Por ahora, solo actualizaremos los likes de ejemplo en el front-end
+            const inmueble = datosEjemplo.find((item) => item.id === idInmueble);
+            if (inmueble) {
+                inmueble.likes++;
+                consultarInmuebles(); // Actualizamos la lista de inmuebles en el front-end
+            }
+        }
+    </script>
+</body>
+</html>
