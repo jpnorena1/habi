@@ -57,6 +57,78 @@ La estructura del proyecto es la siguiente:
 
 *.env: Archivo que contiene las variables de entorno para la configuración de la base de datos.
 
+MICROSERVICIO LIKE 
+
+CREAMOS LA CONSULTA SQL
+
+
+Para agregar la funcionalidad de "Me gusta" a la base de datos, necesitas realizar cambios en la estructura de las tablas y agregar una nueva tabla que registre los "me gusta" de los usuarios a los inmuebles. Aquí está la modificación que debes hacer en el esquema de la base de datos:
+Agregar una nueva tabla "likes" para registrar los "me gusta":
+
+
+CREATE TABLE IF NOT EXISTS `habi_db`.`likes` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_id` INT(11) NOT NULL,
+  `property_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `likes_user_property_unique` (`user_id`, `property_id`) VISIBLE,
+  INDEX `likes_user_id_fk` (`user_id` ASC) VISIBLE,
+  INDEX `likes_property_id_fk` (`property_id` ASC) VISIBLE,
+  CONSTRAINT `likes_user_id_fk`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `habi_db`.`auth_user` (`id`),
+  CONSTRAINT `likes_property_id_fk`
+    FOREIGN KEY (`property_id`)
+    REFERENCES `habi_db`.`property` (`id`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+Modificar la tabla "property" para agregar una nueva columna "likes_count" que registre la cantidad de "me gusta" que ha recibido cada inmueble:
+
+ALTER TABLE `habi_db`.`property`
+ADD COLUMN `likes_count` INT(11) NOT NULL DEFAULT 0;
+
+Actualizar la lógica del servicio de "Me gusta" en el código:
+En el código de tu servicio, Se debera agregar la lógica para registrar los "me gusta" de los usuarios a los inmuebles en la tabla "likes" y actualizar la columna "likes_count" en la tabla "property" cada vez que se da un "me gusta" a un inmueble.
+
+________________________________SEGUNDO EJERCICIO_____________________________________
+Para el segundo ejercicio, que es la manipulación del arreglo "myArray" y la impresión de las secuencias ordenadas, aquí hay un enfoque general sobre cómo abordarlo:
+
+Tecnología a utilizar:
+
+Lenguaje de programación: Python
+Desarrollo del algoritmo para ordenar y separar los bloques del arreglo "myArray":
+
+Recorrer el arreglo "myArray" y dividirlo en bloques utilizando el número cero como marcador de separación.
+def ordenar_separar_bloces(myArray):
+    resultado = []
+    bloque_actual = []
+
+    for num in myArray:
+        if num == 0:
+            if bloque_actual:
+                resultado.append(''.join(sorted(map(str, bloque_actual))))
+            else:
+                resultado.append("X")
+            bloque_actual = []
+        else:
+            bloque_actual.append(num)
+
+    if bloque_actual:
+        resultado.append(''.join(sorted(map(str, bloque_actual))))
+
+    return ' '.join(resultado)
+
+# Ejemplo de uso:
+myArray = [1, 3, 2, 0, 7, 8, 1, 3, 0, 6, 7, 1]
+resultado = ordenar_separar_bloces(myArray)
+print(resultado)  # Salida: "123 1378 167"
+
+Para cada bloque, ordenar los números individualmente de menor a mayor.
+Si un bloque no contiene elementos, reemplazarlo con "X".
+Imprimir las secuencias separando los bloques por un espacio.
+Ejemplo de implementación en Python:
 Uso
 Para ejecutar el proyecto, simplemente ejecuta el archivo app.py:
 python app.py
